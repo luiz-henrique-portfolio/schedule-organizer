@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  </head>
+<body>
+  
+
+  <div id="horarios"></div>
+
+
+<script>    
+let workingdays = [
+    {"day":0, "startTime": "09:00", "endTime":"12:00", "dayDescription":"Domingo"}, // DOMINGO
+    {"day":1, "startTime": "09:00", "endTime":"18:00", "dayDescription":"Segunda"}, // SEGUNDA
+    {"day":2, "startTime": "09:00", "endTime":"18:00", "dayDescription":"Terça"}, // TERÇA
+    {"day":3, "startTime": "09:00", "endTime":"18:00", "dayDescription":"Quarta"}, // QUARTA
+    {"day":4, "startTime": "09:00", "endTime":"18:00", "dayDescription":"Quinta"}, // QUINTA
+    {"day":5, "startTime": "09:00", "endTime":"15:30", "dayDescription":"Sexta"}, // SEXTA
+    {"day":6, "startTime": "09:00", "endTime":"12:00", "dayDescription":"Sábado"}, // SÁBADO
+  ];
+
+function getAgenda (horario){
+  function getHorario(lista){
+    const map1 = lista.map(x => x.endTime);
+    return Array.from (new Set(map1)).map(hora => [hora, []]);
+  }
+
+  var z = getHorario(horario);
+  z.forEach(function (item) {
+    horario.forEach(function (i) {
+      if (item[0] ==  i.endTime){
+        item[1].push(i.dayDescription);
+      }
+    });
+  });
+  return z;
+}
+
+function message(text){
+  var divNova = document.createElement("p");
+  var conteudoNovo = document.createTextNode(text);
+  divNova.appendChild(conteudoNovo); //adiciona o nó de texto à nova div criada
+
+  // adiciona o novo elemento criado e seu conteúdo ao DOM
+  var divAtual = document.getElementById("horarios");
+  divAtual.appendChild(divNova);
+}
+
+getAgenda(workingdays).forEach(function (i) {
+  var list = i[1]
+  var ultimo = list.length
+  if (ultimo == 1){
+    message(list[0] +" - 09:00 até "+ i[0]);
+  }else{
+    if(ultimo == 2 && list.includes("Sábado") && list.includes("Domingo")){
+      message("de "+ list[ultimo-1] +" à "+ list[0] +" - 09:00 até "+ i[0]);
+    }else{
+      message("de "+ list[0] +" à "+ list[ultimo-1] +" - 09:00 até "+ i[0])
+    }    
+  }  
+});
+
+   
+</script>
+
+
+</body>
+</html>
